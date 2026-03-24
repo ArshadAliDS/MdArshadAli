@@ -291,6 +291,9 @@
 
 	  <script>
 
+		// Add these at the very top of your <script> section
+		const USER_IMG = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+		const BOT_IMG = "https://cdn-icons-png.flaticon.com/512/4712/4712035.png";
 
 	  function openResume() {
 	  document.getElementById("resumeModal").style.display = "block";
@@ -366,8 +369,7 @@
 	  };
 
 
-	  const USER_IMG = "https://cdn-icons-png.flaticon.com/512/847/847969.png";
-	  const BOT_IMG = "https://cdn-icons-png.flaticon.com/512/4712/4712109.png";
+
 
 	  </script>
 	  <!-- NAV -->
@@ -378,7 +380,6 @@
 	  <a href="#skills" class="plain-link">Skills</a>
 	  <a href="#case" class="plain-link">Case</a>
 	  <a href="#timeline" class="plain-link">Timeline</a>
-	  <a href="#demos" class="plain-link">Demos</a>
 	  <a href="#contact" class="plain-link">Contact</a>
 	  </div>
 	  </nav>
@@ -468,17 +469,17 @@
 
 	<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 3rem;">
 	  <div style="background: rgba(255,255,255,0.03); border-left: 3px solid #38bdf8; padding: 1.5rem; border-radius: 8px; backdrop-filter: blur(10px); transition: 0.3s;" onmouseover="this.style.background='rgba(56, 189, 248, 0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
-		<div style="font-size: 1.8rem; font-weight: 800; background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">9+ YRS</div>
+		<div style="font-size: 1.8rem; font-weight: 800; background: linear-gradient(90deg, #38bdf8, #818cf8); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">9+ YRS</div>
 		<div style="font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; margin-top: 5px; letter-spacing: 0.05em;">AI & Data Mastery</div>
 	  </div>
 	  
 	  <div style="background: rgba(255,255,255,0.03); border-left: 3px solid #818cf8; padding: 1.5rem; border-radius: 8px; backdrop-filter: blur(10px); transition: 0.3s;" onmouseover="this.style.background='rgba(129, 140, 248, 0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
-		<div style="font-size: 1.8rem; font-weight: 800; background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">AGENTIC</div>
+		<div style="font-size: 1.8rem; font-weight: 800; background: linear-gradient(90deg, #38bdf8, #818cf8); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">AGENTIC</div>
 		<div style="font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; margin-top: 5px; letter-spacing: 0.05em;">Systems Architected</div>
 	  </div>
 
 	  <div style="background: rgba(255,255,255,0.03); border-left: 3px solid #38bdf8; padding: 1.5rem; border-radius: 8px; backdrop-filter: blur(10px); transition: 0.3s;" onmouseover="this.style.background='rgba(56, 189, 248, 0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
-		<div style="font-size: 1.8rem; font-weight: 800; background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">60% GAIN</div>
+		<div style="font-size: 1.8rem; font-weight: 800; background: linear-gradient(90deg, #38bdf8, #818cf8); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">60% GAIN</div>
 		<div style="font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; margin-top: 5px; letter-spacing: 0.05em;">Retrieval Efficiency</div>
 	  </div>
 	</div>
@@ -1869,10 +1870,89 @@ footer {
 	  <button onclick="sendQuickMsg('What did you do at Coforge?')" style="font-size: 10px; background: #1f2937; color: #38bdf8; border: 1px solid #334155; border-radius: 4px; cursor: pointer;">Coforge Role</button>
 	  <button onclick="sendQuickMsg('Agentic AI details')" style="font-size: 10px; background: #1f2937; color: #38bdf8; border: 1px solid #334155; border-radius: 4px; cursor: pointer;">Agentic AI</button>
 	  </div>
-	  <div id="inputArea">
-	  <input id="input" placeholder="Ask about my work..." />
-	  <button id="mic">🎤</button>
-	  </div>
+	<div id="inputArea">
+		<input id="input" placeholder="Ask about my work..." />
+		<button id="sendBtn" style="background: #38bdf8; color: #111827; border: none; border-radius: 4px; margin-left: 5px; padding: 0 12px; font-size: 16px; cursor: pointer;">Send</button>
+		<button id="mic">🎤</button>
+	</div>
+	<script>
+	// Ensure DOM is loaded before attaching event listeners
+	
+
+	// Find your input and button at the end of the file
+	const inputField = document.getElementById("input");
+	const sendBtn = document.querySelector(".send-btn");
+
+	function handleChatTrigger() {
+		const msg = inputField.value.trim();
+		if (msg !== "") {
+			// This calls your existing addMessage function
+			addMessage(msg, "user"); 
+			inputField.value = "";
+
+			// Bot thinking delay
+			setTimeout(() => {
+				const response = getSmartAnswer(msg);
+				typeText(response); // Calls your existing typing function
+			}, 600);
+		}
+	}
+
+	// Attach to click
+	sendBtn.onclick = handleChatTrigger;
+
+	// Attach to Enter key
+	inputField.onkeydown = (e) => {
+		if (e.key === "Enter") {
+			e.preventDefault();
+			handleChatTrigger();
+		}
+	};
+
+	
+
+
+	// --- 2. DEFINE THE SEND LOGIC ---
+	const handleChat = () => {
+		const inputField = document.getElementById("input");
+		const messagesDiv = document.getElementById("messages");
+		const msg = inputField.value.trim();
+		
+		if (msg !== "") {
+			// Show User Message
+			addMessage(msg, "user");
+			inputField.value = "";
+
+			// Show Bot Loading Animation
+			const loading = document.createElement("div");
+			loading.className = "msg bot";
+			loading.innerHTML = `<img src="${BOT_IMG}" class="avatar"><div class="text">...</div>`;
+			messagesDiv.appendChild(loading);
+			messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+			// Generate Response
+			setTimeout(() => {
+				loading.remove();
+				const response = getSmartAnswer(msg);
+				typeText(response); // Triggers your typing effect
+			}, 600);
+		}
+	};
+
+	// --- 3. ATTACH THE TRIGGERS ---
+	// Click Send Button
+	document.querySelector(".send-btn").onclick = handleChat;
+
+	// Press Enter Key
+	document.getElementById("input").ononkeydown = (e) => {
+		if (e.key === "Enter") {
+			e.preventDefault(); // Prevents page refresh
+			handleChat();
+		}
+	};	
+	
+
+	</script>
 	  </div>
 
 	  <script>
@@ -2017,30 +2097,55 @@ footer {
 
 
 	  // 1. Define structured data for specific "Intents"
-	  const profileData = {
-	  experience: "Arshad is a Senior Technical Lead at Coforge (since June 2025), leading AI-enabled SDLC platforms. He has 9+ years of experience including Genpact and Deloitte.",
-	  skills: "He specializes in Agentic AI, RAG, LangChain, and MLOps (Docker, Kubernetes).",
-	  achievements: "Key impacts: 60% faster document search, 50% less manual review time, and 35% faster decision-making.",
-	  education: "He holds an MBA from IGNOU (2022-2024) and a BCom from Delhi University.",
-	  contact: "Email: mdarshadali.2609@gmail.com | Phone: 9716137265."
-	  };
+	const profileData = {
+		experience: "Arshad is a Senior Technical Lead at Coforge (since June 2025), leading AI-enabled SDLC platforms. He has 9+ years of experience including Genpact and Deloitte.",
+		skills: "He specializes in Agentic AI, RAG, LangChain, and MLOps (Docker, Kubernetes).",
+		achievements: "Key impacts: 60% faster document search, 50% less manual review time, and 35% faster decision-making.",
+		education: "He holds an MBA from IGNOU (2022-2024) and a BCom from Delhi University.",
+		contact: "Email: mdarshadali.2609@gmail.com | Phone: 9716137265.",
+		projects: "Arshad has led and built multiple AI/ML projects, including a RAG chatbot that reduced query resolution time by 60%, a demand forecasting system that improved accuracy by 25%, and an agentic AI system that improved efficiency by 40%."
+	};
 	  // 2. The Smart Logic: Intent Check -> Semantic Search -> Basic Score
 	  function getSmartAnswer(q) {
 	  const query = q.toLowerCase();
 
-	  // INTENT HANDLING: Direct matches for common questions
-	  if (query.includes("experience") || query.includes("years") || query.includes("how long")) {
-	  return profileData.experience;
-	  }
-	  if (query.includes("skill") || query.includes("tech") || query.includes("stack") || query.includes("language")) {
-	  return profileData.skills;
-	  }
-	  if (query.includes("project") || query.includes("work") || query.includes("case") || query.includes("built")) {
-	  return profileData.projects;
-	  }
-	  if (query.includes("contact") || query.includes("email") || query.includes("reach")) {
-	  return profileData.contact;
-	  }
+
+
+	// GREETING HANDLING
+	if (["hi","hello","hey","good morning","good afternoon","good evening"].some(greet => query.includes(greet))) {
+		const greetings = [
+			"Hello! 👋 I'm Arshad. How can I help you today?",
+			"Hi there! This is Arshad. What would you like to know?",
+			"Hey! Arshad here. How can I assist you?",
+			"Hi! Hope you're having a great day. How can I help?"
+		];
+		return greetings[Math.floor(Math.random() * greetings.length)];
+	}
+
+	// "How are you" and similar
+	if (["how are you","how's it going","what's up","how are you doing","how do you do"].some(greet => query.includes(greet))) {
+		const responses = [
+			"I'm doing great, thanks for asking! How can I help you today?",
+			"I'm good! Excited to chat with you. How can I assist?",
+			"I'm well and ready to help. What would you like to discuss?",
+			"I'm fantastic, thank you! Let me know how I can help."
+		];
+		return responses[Math.floor(Math.random() * responses.length)];
+	}
+
+	// INTENT HANDLING: Direct matches for common questions
+	if (query.includes("experience") || query.includes("years") || query.includes("how long")) {
+		return profileData.experience;
+	}
+	if (query.includes("skill") || query.includes("tech") || query.includes("stack") || query.includes("language")) {
+		return profileData.skills;
+	}
+	if (query.includes("project") || query.includes("work") || query.includes("case") || query.includes("built")) {
+		return profileData.projects;
+	}
+	if (query.includes("contact") || query.includes("email") || query.includes("reach")) {
+		return profileData.contact;
+	}
 
 	  // SEMANTIC FALLBACK: If no intent matches, use your vector math
 	  let semanticResult = getSemanticAnswer(query);
